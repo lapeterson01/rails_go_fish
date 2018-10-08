@@ -55,6 +55,8 @@ GEM
     erubi (1.7.1)
     execjs (2.7.0)
     ffi (1.9.25-x64-mingw32)
+    figaro (1.1.1)
+      thor (~> 0.14)
     formatador (0.2.5)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
@@ -220,6 +222,7 @@ DEPENDENCIES
   bcrypt (= 3.1.12)
   bootstrap-sass (= 3.3.7)
   byebug (= 9.0.6)
+  figaro
   guard (= 2.13.0)
   guard-minitest (= 2.4.4)
   jbuilder (= 2.7.0)

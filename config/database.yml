@@ -29,10 +29,10 @@ development:
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
   # the same name as the operating system user that initialized the database.
-  #username: rails_go_fish
+  username: postgres
 
   # The password associated with the postgres role (username).
-  #password:
+  password: <%= ENV.fetch('POSTGRES_PASSWORD') %>
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
@@ -71,7 +71,7 @@ test:
 # On Heroku and other platform providers, you may have a full connection URL
 # available as an environment variable. For example:
 #
-#   DATABASE_URL="postgres://myuser:mypass@localhost/somedatabase"
+# DATABASE_URL="postgres://ENV['POSTGRES-PASSWORD']:@localhost/GoFish"
 #
 # You can use this database configuration with:
 #
