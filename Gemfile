@@ -21,7 +21,6 @@ gem 'uglifier',       '3.2.0'
 group :development, :test do
   gem 'byebug', '9.0.6', platform: :mri
   gem 'rspec-rails', '3.7.2'
-  gem 'figaro'
 end
 
 group :development do

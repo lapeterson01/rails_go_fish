@@ -79,7 +79,8 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
-  <<: *default
-  database: rails_go_fish_production
-  username: rails_go_fish
-  password: <%= ENV['RAILS_GO_FISH_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
+  # <<: *default
+  # database: rails_go_fish_production
+  # username: rails_go_fish
+  # password: <%= ENV['RAILS_GO_FISH_DATABASE_PASSWORD'] %>
