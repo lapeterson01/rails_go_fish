@@ -1,4 +1,8 @@
 class SessionsController < ApplicationController
+  def new
+    @user = User.new
+  end
+
   def signin
     @user = User.find_or_initialize_by user_params
     @user.save

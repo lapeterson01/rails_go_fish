@@ -1,0 +1,14 @@
+.home
+    .home__title
+        h1 style="font-variant: small-caps" Go Fish!
+
+    .home__instruction
+        h4 Please Enter Your Name
+
+    = form_for @user, url: signin_path(@user) do |form|
+        .field
+            = form.label :name
+            = form.text_field :name, id: :user_name
+
+        .actions
+            = form.submit
