@@ -3,5 +3,5 @@ class GameController < ApplicationController
     @user = User.new
   end
 
-  def lobby;  end
+  def lobby; end
 end
