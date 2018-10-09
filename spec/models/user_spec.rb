@@ -20,24 +20,4 @@ RSpec.describe User, type: :model do
       expect(@user).to_not be_valid
     end
   end
-
-  describe 'username' do
-    it 'should not be empty' do
-      @user.username = '    '
-      expect(@user).to_not be_valid
-    end
-
-    it 'should not be too long' do
-      @user.username = 'a' * 31
-      expect(@user).to_not be_valid
-    end
-
-    it 'should be unique' do
-      duplicate_user = @user.dup
-      duplicate_user.username = @user.username.upcase
-      @user.save
-      expect(duplicate_user).to_not be_valid
-      @user.destroy
-    end
-  end
 end
