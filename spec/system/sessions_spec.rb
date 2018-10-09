@@ -10,4 +10,11 @@ RSpec.describe 'Sessions', type: :system do
     expect(page).to have_content 'Go Fish!'
     expect(page).to have_content 'Please Enter Your Name'
   end
+
+  it 'allows user to signin' do
+    visit root_url
+    fill_in 'Name', with: 'Test User'
+    click_on 'Create User'
+    expect(page).to have_content 'This is the lobby'
+  end
 end
