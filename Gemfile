@@ -19,7 +19,6 @@ gem 'turbolinks',     '5.0.1'
 gem 'uglifier',       '3.2.0'
 
 group :development, :test do
-  gem 'byebug', '9.0.6', platform: :mri
   gem 'database_cleaner'
   gem 'rspec-rails', '3.7.2'
 end
@@ -34,10 +33,6 @@ end
 
 group :test do
   gem 'capybara',                 '~> 2.13'
-  gem 'guard',                    '2.13.0'
-  gem 'guard-minitest',           '2.4.4'
-  gem 'minitest',                 '5.10.3'
-  gem 'minitest-reporters',       '1.1.14'
   gem 'rails-controller-testing', '1.0.2'
 end
 
