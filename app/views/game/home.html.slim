@@ -1,14 +1,15 @@
-div.home
-    div.home__title
+.home
+    .home__title
         h1 style="font-variant: small-caps" Go Fish!
 
-    div.home__instruction
+    .home__instruction
         h4 Please Enter Your Name
 
-    form action="/join" method="post"
-        div.home__name
-            div.form-group
-                input.name__input.form-control id="n" name="name" type="text" placeholder="Name"
+    = render 'form', user: @user
+    / form action="/join" method="post"
+    /     div.home__name
+    /         div.form-group
+    /             input.name__input.form-control id="n" name="name" type="text" placeholder="Name"
 
-            div
-                button.name__button type="submit" Join
+    /         div
+    /             button.name__button type="submit" Join
