@@ -5,6 +5,15 @@
     width: 700px;
     text-align: center;
     border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.back--link {
+    width: 90%;
+    display: flex;
 }
 
 .home__title {
@@ -14,7 +23,7 @@
     color: #CDD042;
     -webkit-text-stroke-color: #A5A728;
     -webkit-text-stroke-width: 1px;
-    margin-top: -30px;
+    margin: -50px;
 }
 
 .home__instruction {
@@ -46,7 +55,7 @@
     border: 1px black solid;
     border-radius: 15px;
     text-align: center;
-    font-size: 35px;
+    font-size: 25px;
     margin: 5px;
 }
 

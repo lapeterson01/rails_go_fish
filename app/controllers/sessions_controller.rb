@@ -5,14 +5,12 @@ class SessionsController < ApplicationController
 
   def create
     @user = User.find_by_username user_params('username')
-    if @user
-      if @user.authenticate(user_params('password'))
-        session[:current_user] = @user.id
-        redirect_to users_path, notice: 'Logged in successfully'
-      else
-        redirect_to root_path
-      end
-    end
+    return redirect_to root_path unless @user
+
+    return redirect_to root_path unless @user.authenticate(user_params('password'))
+
+    session[:current_user] = @user.id
+    redirect_to users_path, notice: 'Logged in successfully'
   end
 
   private

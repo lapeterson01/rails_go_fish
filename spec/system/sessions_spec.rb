@@ -1,6 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe 'Sessions', type: :system do
+  def signup
+    click_on 'Sign Up'
+    fill_in 'Name', with: test_user[:name]
+    fill_in 'Username', with: test_user[:username]
+    fill_in 'Password', with: test_user[:password]
+    fill_in 'Password Confirmation', with: test_user[:password]
+    click_on 'Go!'
+  end
+
+  def signin
+    fill_in 'Username', with: test_user[:username]
+    fill_in 'Password', with: test_user[:password]
+    click_on 'Go!'
+  end
+
+  let(:test_user) { { name: 'Jermaine Thiel', username: 'ja_real_thiel', password: 'password' } }
+
   before do
     driven_by :rack_test
   end
@@ -8,14 +25,21 @@ RSpec.describe 'Sessions', type: :system do
   it 'shows signin page' do
     visit root_url
     expect(page).to have_content 'Go Fish!'
-    expect(page).to have_content 'Please Enter Your Name'
+    expect(page).to have_content 'Login'
+  end
+
+  it 'allows user to signup' do
+    visit root_url
+    signup
+    expect(page).to have_content 'Go Fish!'
+    user = User.find_by(name: 'Jermaine Thiel', username: 'ja_real_thiel')
+    expect(!!user.authenticate('password')).to eq true # rubocop disable:Style/DoubleNegation
   end
 
   it 'allows user to signin' do
     visit root_url
-    fill_in 'Name', with: 'Test User'
-    fill_in 'Password', with: 'password'
-    click_on 'Go!'
+    signup
+    signin
     expect(page).to have_content 'This is the lobby'
   end
 end

@@ -1,4 +1,10 @@
-div
+.home
+    .back--link
+        = link_to 'Back', root_path
+
+    .home__title
+        h1 Sign Up
+
     = form_for @user, url: users_path(@user) do |form|
         .home__name
             .field

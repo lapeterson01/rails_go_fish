@@ -1,9 +1,9 @@
 .home
     .home__title
-        h1 style="font-variant: small-caps" Go Fish!
+        h1 Go Fish!
 
     .home__instruction
-        h4 Please Enter Your Name
+        h4 Login
 
     = form_for @user, url: sessions_path(@user) do |form|
         .home__name
