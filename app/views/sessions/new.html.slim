@@ -6,9 +6,9 @@
         h4 Please Enter Your Name
 
     = form_for @user, url: sessions_path(@user) do |form|
-        .field
-            = form.label :name
-            = form.text_field :name, id: :user_name
+        .home__name
+            .field
+                = form.text_field :name, id: :user_name, class: 'name__input', placeholder: 'Name'
 
-        .actions
-            = form.submit
+            .actions
+                = form.submit class: 'name__button', value: 'Go!'
