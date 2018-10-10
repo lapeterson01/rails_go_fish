@@ -14,12 +14,14 @@
     color: #CDD042;
     -webkit-text-stroke-color: #A5A728;
     -webkit-text-stroke-width: 1px;
+    margin-top: -30px;
 }
 
 .home__instruction {
     font-size: 50px;
     font-variant: small-caps;
     margin-top: -50px;
+    margin-bottom: -30px;
     color: #CDD042;
     -webkit-text-stroke-color: #A5A728;
     -webkit-text-stroke-width: 1px;
@@ -27,8 +29,15 @@
 
 .home__name {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .name__input {
@@ -38,6 +47,7 @@
     border-radius: 15px;
     text-align: center;
     font-size: 35px;
+    margin: 5px;
 }
 
 .name__button {

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   before do
-    @user = User.new(name: 'Test User', username: 'testuser97')
+    @user = User.new(name: 'Test User', username: 'testuser97', password: 'password', password_confirmation: 'password')
   end
 
   it 'should be valid' do

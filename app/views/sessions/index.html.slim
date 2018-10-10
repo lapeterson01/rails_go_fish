@@ -1,0 +1,17 @@
+.home
+    .home__title
+        h1 style="font-variant: small-caps" Go Fish!
+
+    .home__instruction
+        h4 Please Enter Your Name
+
+    = form_for @user, url: sessions_path(@user) do |form|
+        .home__name
+            .field
+                = form.text_field :username, id: :user_username, class: 'name__input', placeholder: 'Username'
+                = form.password_field :password, id: :user_password, class: 'name__input', placeholder: 'Password'
+
+            .actions
+                = form.submit class: 'name__button', value: 'Go!'
+
+    = link_to 'Sign Up', new_user_path

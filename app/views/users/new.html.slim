@@ -1,0 +1,11 @@
+div
+    = form_for @user, url: users_path(@user) do |form|
+        .home__name
+            .field
+                = form.text_field :name, id: :user_name, class: 'name__input', placeholder: 'Name'
+                = form.text_field :username, id: :user_username, class: 'name__input', placeholder: 'Username'
+                = form.password_field :password, id: :user_password, class: 'name__input', placeholder: 'Password'
+                = form.password_field :password_confirmation, id: :user_password_confirmation, class: 'name__input', placeholder: 'Password Confirmation'
+
+            .actions
+                = form.submit class: 'name__button', value: 'Go!'

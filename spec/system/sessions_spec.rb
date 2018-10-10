@@ -14,7 +14,8 @@ RSpec.describe 'Sessions', type: :system do
   it 'allows user to signin' do
     visit root_url
     fill_in 'Name', with: 'Test User'
-    click_on 'Create User'
+    fill_in 'Password', with: 'password'
+    click_on 'Go!'
     expect(page).to have_content 'This is the lobby'
   end
 end
