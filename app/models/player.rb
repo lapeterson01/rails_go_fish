@@ -8,17 +8,17 @@ class Player
   end
 
   def retrieve_card(card)
-    @hand[card.rank] = [] unless @hand[card.rank]
-    @hand[card.rank].push(card)
+    hand[card.rank] = [] unless hand[card.rank]
+    hand[card.rank].push(card)
   end
 
   def give_up_cards(rank)
-    @hand.delete(rank)
+    hand.delete(rank)
   end
 
   def count_hand
     count = 0
-    @hand.each_value { |set| count += set.length }
+    hand.each_value { |set| count += set.length }
     count
   end
 end

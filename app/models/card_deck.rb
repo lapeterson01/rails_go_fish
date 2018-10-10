@@ -9,15 +9,15 @@ class CardDeck
   end
 
   def shuffle!
-    @cards.shuffle!
+    cards.shuffle!
   end
 
   def deal
-    @cards.shift
+    cards.shift
   end
 
   def out_of_cards?
-    @cards.empty?
+    cards.empty?
   end
 
   def ==(other)
