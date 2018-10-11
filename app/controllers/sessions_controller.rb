@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     return redirect_to root_path unless @user.authenticate(user_params('password'))
 
     session[:current_user] = @user.id
-    redirect_to users_path, notice: 'Logged in successfully'
+    redirect_to games_path, notice: 'Logged in successfully'
   end
 
   private
