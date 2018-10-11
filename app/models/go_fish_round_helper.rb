@@ -1,5 +1,5 @@
 module GoFishRoundHelper
-  attr_reader :player, :rank, :get_catch, :round_result
+  attr_reader :player, :rank, :get_catch
 
   def set_player_and_rank(player, rank)
     @player = player

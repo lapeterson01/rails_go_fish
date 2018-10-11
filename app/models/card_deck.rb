@@ -28,6 +28,16 @@ class CardDeck
     cards.empty?
   end
 
+  def as_json
+    {
+      cards: cards.map(&:as_json)
+    }
+  end
+
+  def self.from_json(data)
+    new(data['cards'].map { |card| PlayingCard.from_json(card) })
+  end
+
   def ==(other)
     equal = true
     other.cards.each do |card2|

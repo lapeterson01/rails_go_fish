@@ -1,6 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe CardDeck, type: :model do
+  def test_from_json(card)
+    {
+      'rank' => card.rank,
+      'suit' => card.suit
+    }
+  end
+
   let(:deck1) { CardDeck.new }
   let(:deck2) { CardDeck.new }
 
@@ -38,6 +45,16 @@ RSpec.describe CardDeck, type: :model do
     it 'returns true if the deck is out of cards and false if it is not' do
       expect(deck1.out_of_cards?).to eq false
       expect(deck2.out_of_cards?).to eq true
+    end
+  end
+
+  describe 'json methods' do
+    it 'allows carddeck data to be converted to json object' do
+      expect(deck1.as_json).to eq(cards: deck1.cards.map(&:as_json))
+    end
+
+    it 'allows carddeck json object to be converted to class instance' do
+      expect(CardDeck.from_json('cards' => deck1.as_json[:cards].map(&:stringify_keys))).to eq deck1
     end
   end
 end

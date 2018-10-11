@@ -2,10 +2,10 @@ class Player
   attr_reader :name, :hand
   attr_accessor :books
 
-  def initialize(name)
+  def initialize(name, hand = {}, books = 0)
     @name = name
-    @hand = {}
-    @books = 0
+    @hand = hand
+    @books = books
   end
 
   def retrieve_card(card)
@@ -29,5 +29,17 @@ class Player
 
   def ==(other)
     name == other.name
+  end
+
+  def as_json
+    {
+      name: name,
+      hand: hand,
+      books: books
+    }
+  end
+
+  def self.from_json(data)
+    new(data['name'], data['hand'], data['books'])
   end
 end

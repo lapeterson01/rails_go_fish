@@ -45,4 +45,14 @@ RSpec.describe Player, type: :model do
       expect(player).to_not eq player2
     end
   end
+
+  describe 'json methods' do
+    it 'allows player to be converted to json object' do
+      expect(player.as_json).to eq(name: player.name, hand: player.hand, books: player.books)
+    end
+
+    it 'allows player json object to be converted to class instance' do
+      expect(Player.from_json(player.as_json.stringify_keys)).to eq player
+    end
+  end
 end

@@ -42,6 +42,15 @@ RSpec.describe GoFish, type: :model do
   end
   # rubocop:enable Metrics/AbcSize
 
+  def json_go_fish
+    {
+      'deck' => { 'cards' => go_fish.deck.as_json[:cards].map(&:stringify_keys) },
+      'players' => go_fish.players.values.map(&:as_json).map(&:stringify_keys),
+      'turn' => go_fish.turn.name,
+      'round_result' => go_fish.round_result
+    }
+  end
+
   let(:go_fish) { GoFish.new }
   let(:player1) { Player.new('Player 1') }
   let(:player2) { Player.new('Player 2') }
@@ -57,7 +66,7 @@ RSpec.describe GoFish, type: :model do
     end
   end
 
-  describe 'go_fishplay' do
+  describe 'gameplay' do
     let(:card1) { PlayingCard.new('A', 'Spades') }
     let(:card2) { PlayingCard.new('A', 'Clubs') }
 
@@ -207,6 +216,41 @@ RSpec.describe GoFish, type: :model do
 
     it 'sets the turn to the first person to join' do
       expect(go_fish.turn).to eq player1
+    end
+  end
+
+  describe 'json methods' do
+    before do
+      players.each { |player| go_fish.add_player(player) }
+    end
+
+    it 'allows player to be converted to json object' do
+      json_go_fish = {
+        deck: go_fish.deck.as_json,
+        players: go_fish.players.values.map(&:as_json),
+        turn: go_fish.turn.name,
+        round_result: go_fish.round_result
+      }
+      expect(go_fish.as_json).to eq(json_go_fish)
+    end
+
+    it 'allows player json object to be converted to class instance' do
+      expect(GoFish.from_json(json_go_fish)).to eq go_fish
+    end
+  end
+
+  describe 'equality' do
+    before do
+      players.each { |player| go_fish.add_player(player) }
+    end
+
+    it 'is equal if deck, players, turn, and round_result are equal' do
+      go_fish.start
+      go_fish.play_round(player2, 'A')
+      duplicate_go_fish = go_fish.dup
+      expect(duplicate_go_fish).to eq go_fish
+      go_fish2 = GoFish.new
+      expect(go_fish2).to_not eq go_fish
     end
   end
 end
