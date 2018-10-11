@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Game, type: :model do
-  def round_result_expectations(cards, round_result = game.round_result, player = game.player, rank = game.rank, turn = game.turn)
-    expect(round_result[:card_from]).to eq player
+  # rubocop:disable Metrics/AbcSize
+  def round_result_expectations(cards, round_result = game.round_result)
+    expect(round_result[:card_from]).to eq game.player
     expect(round_result[:cards]).to eq cards
-    expect(round_result[:rank_asked_for]).to eq rank
-    expect(round_result[:turn]).to eq turn
+    expect(round_result[:rank_asked_for]).to eq game.rank
+    expect(round_result[:turn]).to eq game.turn
   end
+  # rubocop:enable Metrics/AbcSize
 
   let(:game) { Game.new }
   let(:player1) { Player.new('Player 1') }
