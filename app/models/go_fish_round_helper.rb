@@ -1,4 +1,4 @@
-module GameRoundHelper
+module GoFishRoundHelper
   attr_reader :player, :rank, :get_catch, :round_result
 
   def set_player_and_rank(player, rank)
