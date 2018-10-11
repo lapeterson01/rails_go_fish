@@ -16,6 +16,10 @@ RSpec.describe 'Sessions', type: :system do
     click_on 'Go!'
   end
 
+  def signout
+    click_on 'Logout'
+  end
+
   let(:test_user) { { name: 'Jermaine Thiel', username: 'ja_real_thiel', password: 'password' } }
 
   before do
@@ -41,5 +45,18 @@ RSpec.describe 'Sessions', type: :system do
     signup
     signin
     expect(page).to have_content 'This is the lobby'
+  end
+
+  it 'allows user to signout' do
+    visit root_url
+    signup
+    signin
+    signout
+    expect(page).to have_content 'Go Fish!'
+  end
+
+  it 'does not allow user to visit pages other than signin and signup pages when not logged in' do
+    visit games_path
+    expect(page).to have_content 'Login to continue'
   end
 end

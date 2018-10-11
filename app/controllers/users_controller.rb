@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  skip_before_action :require_authentication, only: %i[new create]
+
   def new
     @user = User.new
   end
