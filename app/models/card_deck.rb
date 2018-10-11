@@ -4,8 +4,16 @@ class CardDeck
   RANKS = %w[A K Q J 10 9 8 7 6 5 4 3 2].freeze
   SUITS = %w[Spades Clubs Diamonds Hearts].freeze
 
-  def initialize(cards = RANKS.map { |rank| SUITS.map { |suit| PlayingCard.new(rank, suit) } })
-    @cards = cards.flatten
+  def initialize(cards = CardDeck.create_standard_deck)
+    @cards = cards
+  end
+
+  def self.create_standard_deck
+    RANKS.flat_map do |rank|
+      SUITS.map do |suit|
+        PlayingCard.new(rank, suit)
+      end
+    end
   end
 
   def shuffle!
