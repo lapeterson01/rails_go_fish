@@ -5,8 +5,8 @@ class Game < ApplicationRecord
 
   DEAL_AMOUNT = 7
 
-  def initialize
-    @deck = CardDeck.new
+  def initialize(deck = CardDeck.new)
+    @deck = deck
     @players = {}
   end
 
@@ -24,6 +24,13 @@ class Game < ApplicationRecord
     player.hand[rank] ? player_has_card : go_fish
     calculate_books
     next_turn unless get_catch
+  end
+
+  def winner
+    return unless players.values.any?(&:out_of_cards?) || deck.out_of_cards?
+
+    winners = players.values.map { |player| [player, player.books] }.to_h
+    winners.select { |_player, books| books == winners.values.max }.keys
   end
 
   def add_player(player)

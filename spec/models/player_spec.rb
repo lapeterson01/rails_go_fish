@@ -28,4 +28,21 @@ RSpec.describe Player, type: :model do
       expect(player.count_hand).to eq 1
     end
   end
+
+  describe '#out_of_cards?' do
+    it 'returns true if player hand is empty' do
+      expect(player.out_of_cards?).to eq true
+      player.retrieve_card(card1)
+      expect(player.out_of_cards?).to eq false
+    end
+  end
+
+  describe 'equality' do
+    it 'returns true if names are equal' do
+      duplicate_player = player.dup
+      expect(player).to eq duplicate_player
+      player2 = Player.new('Player 2')
+      expect(player).to_not eq player2
+    end
+  end
 end

@@ -1,5 +1,36 @@
 require 'rails_helper'
 
+class TestDeck
+  attr_reader :cards
+
+  RANKS = %w[A K Q J].freeze
+  SUITS = %w[Spades Clubs Diamonds Hearts].freeze
+
+  def initialize
+    @cards = RANKS.map { |rank| SUITS.map { |suit| PlayingCard.new(rank, suit) } }.flatten
+  end
+
+  def shuffle!
+    # do nothing
+  end
+
+  def deal
+    cards.shift
+  end
+
+  def out_of_cards?
+    cards.empty?
+  end
+
+  def ==(other)
+    equal = true
+    other.cards.each do |card2|
+      equal = false if cards[other.cards.index(card2)] != card2
+    end
+    equal
+  end
+end
+
 RSpec.describe Game, type: :model do
   # rubocop:disable Metrics/AbcSize
   def round_result_expectations(cards, round_result = game.round_result)
@@ -7,6 +38,7 @@ RSpec.describe Game, type: :model do
     expect(round_result[:cards]).to eq cards
     expect(round_result[:rank_asked_for]).to eq game.rank
     expect(round_result[:turn]).to eq game.turn
+    yield if block_given?
   end
   # rubocop:enable Metrics/AbcSize
 
@@ -26,6 +58,9 @@ RSpec.describe Game, type: :model do
   end
 
   describe 'gameplay' do
+    let(:card1) { PlayingCard.new('A', 'Spades') }
+    let(:card2) { PlayingCard.new('A', 'Clubs') }
+
     before do
       players.each { |player| game.add_player(player) }
     end
@@ -47,9 +82,6 @@ RSpec.describe Game, type: :model do
     end
 
     describe '#play_round' do
-      let(:card1) { PlayingCard.new('A', 'Spades') }
-      let(:card2) { PlayingCard.new('A', 'Clubs') }
-
       before do
         player1.retrieve_card(card1)
         player2.retrieve_card(card2)
@@ -118,8 +150,9 @@ RSpec.describe Game, type: :model do
           game.set_player_and_rank(player2, 'A')
           game.player_has_card
           game.calculate_books
-          round_result_expectations([card2, card3, card4])
-          expect(game.round_result[:books]).to eq 1
+          round_result_expectations([card2, card3, card4]) do
+            expect(game.round_result[:books]).to eq 1
+          end
         end
 
         it 'resets on next player turn' do
@@ -129,6 +162,36 @@ RSpec.describe Game, type: :model do
           game.play_round(player1, 'A')
           round_result_expectations([card1])
         end
+      end
+    end
+
+    describe '#winner' do
+      let(:game) { Game.new(TestDeck.new) }
+
+      before do
+        players.each { |player| game.add_player(player) }
+      end
+
+      it 'assigns a winner when the pool is out of cards' do
+        game.start
+        game.play_round(player2, 'A')
+        expect(game.winner).to eq nil
+        players.reverse_each { |player| game.play_round(player, '2') }
+        expect(game.winner).to eq [player1]
+      end
+
+      it 'assigns a winner when a player is out of cards' do
+        player1.retrieve_card(card1)
+        player2.retrieve_card(card2)
+        %w[Diamonds Hearts].each { |suit| player1.retrieve_card(PlayingCard.new('A', suit)) }
+        game.play_round(player2, 'A')
+        expect(game.winner).to eq [player1]
+      end
+
+      it 'assigns multiple winners if there is a tie' do
+        game.start
+        players.reverse_each { |player| game.play_round(player, '2') }
+        expect(game.winner).to eq [player1, player2]
       end
     end
   end

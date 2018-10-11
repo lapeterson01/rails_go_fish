@@ -22,4 +22,12 @@ class Player
     hand.each_value { |set| count += set.length }
     count
   end
+
+  def out_of_cards?
+    hand.empty?
+  end
+
+  def ==(other)
+    name == other.name
+  end
 end
