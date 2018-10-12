@@ -8,12 +8,27 @@ RSpec.describe Game, type: :model do
     expect(test_game).to be_valid
   end
 
-  it 'should return a default name if name is left empty' do
-    test_game = Game.new(number_of_players: 2, data: go_fish.start.as_json)
-    test_game.save
-    expect(test_game.name).to eq "Go Fish #{test_game.id}"
-    test_game = Game.new(name: ' ', number_of_players: 2, data: go_fish.start.as_json)
-    test_game.save
-    expect(test_game.name).to eq "Go Fish #{test_game.id}"
+  describe 'name' do
+    it 'should return a default name if name is left empty' do
+      test_game.name = ' '
+      test_game.save
+      expect(test_game.name).to eq "Go Fish #{test_game.id}"
+      test_game2 = Game.new(number_of_players: 2, data: go_fish.start.as_json)
+      test_game2.save
+      expect(test_game2.name).to eq "Go Fish #{test_game2.id}"
+    end
+
+    it 'must be unique' do
+      duplicate_test_game = test_game.dup
+      test_game.save
+      expect(duplicate_test_game).to_not be_valid
+    end
+  end
+
+  describe 'number_of_players' do
+    it 'should only allow a max number of players' do
+      test_game.number_of_players = 5
+      expect(test_game).to_not be_valid
+    end
   end
 end

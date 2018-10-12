@@ -8,7 +8,10 @@ RSpec.describe 'Games', type: :system do
     click_on 'Go!'
   end
 
-  let(:test_user) { User.new(name: 'Jermaine Thiel', username: 'ja_real_thiel', password: 'password', password_confirmation: 'password') }
+  let(:test_user) do
+    User.new name: 'Jermaine Thiel', username: 'ja_real_thiel', password: 'password',
+             password_confirmation: 'password'
+  end
 
   before do
     driven_by :rack_test

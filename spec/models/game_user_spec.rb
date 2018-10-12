@@ -1,23 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe GameUser, type: :model do
-  # def game
-  #   @game
-  # end
-
-  # def user
-  #   @user
-  # end
-
   let(:go_fish) { GoFish.new }
   let(:test_game) { Game.new(name: 'test_game', number_of_players: 2, data: go_fish.start.as_json) }
-  let(:test_user) { User.new(name: 'Jermaine Thiel', username: 'ja_real_thiel', password: 'password', password_confirmation: 'password') }
+  let(:test_user) do
+    User.new name: 'Jermaine Thiel', username: 'ja_real_thiel', password: 'password',
+             password_confirmation: 'password'
+  end
 
-  # before do
-  #   @game = Game.new(name: 'test_game', number_of_players: 2, data: go_fish.start.as_json)
-  #   @user = User.new(name: 'Jermaine Thiel', username: 'ja_real_thiel', password: 'password', password_confirmation: 'password')
-  # end
-  
   it 'should contain a user and game id' do
     test_game.save
     test_user.save
