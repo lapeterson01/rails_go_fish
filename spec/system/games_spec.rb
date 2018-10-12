@@ -23,4 +23,10 @@ RSpec.describe 'Games', type: :system do
     expect(page).to have_content 'Games'
     expect(page).to have_content 'Create Game'
   end
+
+  it 'allows a user to visit new game page' do
+    signin
+    click_on 'Create Game'
+    expect(page).to have_content 'Create Game'
+  end
 end

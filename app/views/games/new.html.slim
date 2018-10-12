@@ -1,1 +1,15 @@
-h2 new game
+.home
+    .back--link
+        = link_to 'Back', games_path
+
+    .home__title
+        h1 Create Game
+
+    = form_for @game, url: games_path(@game) do |form|
+        .home__name
+            .field
+                = form.text_field :name, id: :game_name, class: 'name__input', placeholder: 'Name'
+                = form.text_field :number_of_players, id: :game_number_of_players, class: 'name__input', placeholder: 'Number of players'
+
+            .actions
+                = form.submit class: 'name__button', value: 'Go!'

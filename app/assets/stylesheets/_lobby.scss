@@ -85,45 +85,33 @@
 }
 
 .games__list {
+    direction: row;
     list-style-type: none;
     margin: 0;
-    padding: 0;
     text-align: center;
     font-size: 40px;
     font-variant: small-caps;
     color: #CDD042;
     -webkit-text-stroke-color: #A5A728;
     -webkit-text-stroke-width: 1px;
+    border-top: 2px groove;
+    padding: 30px;
 }
 
-// .players__list--current_player {
-//     color: #60D394;
-//     -webkit-text-stroke-color: #4FAD7A;
-//     -webkit-text-stroke-width: 0.75px;
-// }
-
-// .game-message {
-//     margin-top: 75px;
-//     font-size: 35px;
-//     font-variant: small-caps;
-//     color: #CDD042;
-//     -webkit-text-stroke-color: #A5A728;
-//     -webkit-text-stroke-width: 0.5px;
-// }
-
-// .button--game {
-//     position: relative;
-//     top: 50px;
-//     height: 45px;
-//     width: 200px;
-//     font-size: 30px;
-//     font-variant: small-caps;
-//     margin-top: 0px;
-//     background: linear-gradient(#DADC75, #CDD042);
-//     color: white;
-//     border-radius: 15px;
-//     cursor: pointer;
-// }
+.games__item {
+    text-decoration: none;
+    color: #CDD042;
+    -webkit-text-stroke-color: #A5A728;
+    -webkit-text-stroke-width: 1px;
+    font-size: 35px;
+    padding: 10px;
+    border: 2px ridge;
+    display: flex;
+    justify-content: space-around;
+    &:hover {
+        text-decoration: underline;
+    }
+}
 
 @media (max-width: 400px) {
     .lobby {

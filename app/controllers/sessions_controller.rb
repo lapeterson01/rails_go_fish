@@ -6,10 +6,11 @@ class SessionsController < ApplicationController
   end
 
   def create
-    @user = User.find_by_username user_params('username')
-    return redirect_to root_path unless @user
+    username = params.require(:user).permit(:username)
+    @user = User.find_by_username(username)
+    return redirect_to root_path, notice: "Username #{username} not found in the system" unless @user
 
-    return redirect_to root_path unless @user.authenticate(user_params('password'))
+    return redirect_to root_path, notice: 'Username/password combination incorrect' unless @user.authenticate(user_params('password'))
 
     session[:current_user] = @user.id
     redirect_to games_path, notice: 'Logged in successfully'
