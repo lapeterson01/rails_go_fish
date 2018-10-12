@@ -12,20 +12,18 @@
       li
         = link_to 'Go Fish!', games_path, class: 'navbar--item'
       li
-        = button_to 'Logout', session_path, method: :delete
+        = button_to 'Logout', session_path, method: :delete, class: 'logout'
 
   .games
-    ul.games__titles
-      li
-        h2.games__title Games:
-      li
-        = link_to 'Create Game', new_game_path
+    .games__titles
+      .create-game
+        = link_to 'Create Game', new_game_path, class: 'create-game--button'
+      h2.games__title Games:
 
     ul.games__list
-      - if !games.empty
+      - unless games.empty?
         - games.each do |game|
-          - else
-            = link_to "#{game.name}", game_path(game.id)
+          = link_to "#{game.name}", game_path(game.id)
 
     / button.refresh onClick="window.location.reload()"
     /     i.fas.fa-redo

@@ -44,7 +44,7 @@ RSpec.describe 'Sessions', type: :system do
     visit root_url
     signup
     signin
-    expect(page).to have_content 'This is the lobby'
+    expect(page).to have_content 'Games'
   end
 
   it 'allows user to signout' do

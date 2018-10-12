@@ -26,8 +26,10 @@
     padding: 10px;
     padding-left: 20px;
     overflow: hidden;
-    width: 150px;
+    width: 100%;
     height: auto;
+    display: flex;
+    justify-content: space-between;
 }
 
 .navbar--item {
@@ -39,7 +41,42 @@
     text-decoration: none;
 }
 
-.players__title {
+.logout {
+    float: left;
+    display: block;
+    font-size: 30px;
+    font-variant: small-caps;
+    color: #D7D968;
+    text-decoration: none;
+    background: none;
+    border: none;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.create-game {
+    float: left;
+    font-variant: small-caps;
+    background: none;
+    border: none;
+    text-align: end;
+    width: 90%;
+    &:hover {
+        cursor: pointer;
+    }
+    font-size: 20px;
+}
+
+.create-game--button {
+    text-decoration: none;
+    color: #A5A728;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.games__title {
     font-size: 60px;
     font-variant: small-caps;
     color: #CDD042;
@@ -47,7 +84,7 @@
     -webkit-text-stroke-width: 1px;
 }
 
-.players__list {
+.games__list {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -59,34 +96,34 @@
     -webkit-text-stroke-width: 1px;
 }
 
-.players__list--current_player {
-    color: #60D394;
-    -webkit-text-stroke-color: #4FAD7A;
-    -webkit-text-stroke-width: 0.75px;
-}
+// .players__list--current_player {
+//     color: #60D394;
+//     -webkit-text-stroke-color: #4FAD7A;
+//     -webkit-text-stroke-width: 0.75px;
+// }
 
-.game-message {
-    margin-top: 75px;
-    font-size: 35px;
-    font-variant: small-caps;
-    color: #CDD042;
-    -webkit-text-stroke-color: #A5A728;
-    -webkit-text-stroke-width: 0.5px;
-}
+// .game-message {
+//     margin-top: 75px;
+//     font-size: 35px;
+//     font-variant: small-caps;
+//     color: #CDD042;
+//     -webkit-text-stroke-color: #A5A728;
+//     -webkit-text-stroke-width: 0.5px;
+// }
 
-.button--game {
-    position: relative;
-    top: 50px;
-    height: 45px;
-    width: 200px;
-    font-size: 30px;
-    font-variant: small-caps;
-    margin-top: 0px;
-    background: linear-gradient(#DADC75, #CDD042);
-    color: white;
-    border-radius: 15px;
-    cursor: pointer;
-}
+// .button--game {
+//     position: relative;
+//     top: 50px;
+//     height: 45px;
+//     width: 200px;
+//     font-size: 30px;
+//     font-variant: small-caps;
+//     margin-top: 0px;
+//     background: linear-gradient(#DADC75, #CDD042);
+//     color: white;
+//     border-radius: 15px;
+//     cursor: pointer;
+// }
 
 @media (max-width: 400px) {
     .lobby {
