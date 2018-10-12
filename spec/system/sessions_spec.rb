@@ -59,4 +59,12 @@ RSpec.describe 'Sessions', type: :system do
     visit games_path
     expect(page).to have_content 'Login to continue'
   end
+
+  it 'allows user to go to games lobby' do
+    visit root_url
+    signup
+    signin
+    expect(page).to have_content 'Games'
+    expect(page).to have_content 'Create Game'
+  end
 end

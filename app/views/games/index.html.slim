@@ -1,4 +1,31 @@
-h2 This is the lobby
+/ form action="/refresh" name="refresh" method="post"
 
-= button_to 'Logout', session_path, method: :delete
+/ - if game.players.length > 1 && refresh == false
+/     javascript:
+/         window.onload = function() {
+/             document.forms['refresh'].submit();
+/         };
 
+.lobby
+  .navbar
+    ul.navbar--list
+      li
+        = link_to 'Go Fish!', games_path, class: 'navbar--item'
+      li
+        = button_to 'Logout', session_path, method: :delete
+
+  .games
+    ul.games__titles
+      li
+        h2.games__title Games:
+      li
+        = link_to 'Create Game', new_game_path
+
+    ul.games__list
+      - if !games.empty
+        - games.each do |game|
+          - else
+            = link_to "#{game.name}", game_path(game.id)
+
+    / button.refresh onClick="window.location.reload()"
+    /     i.fas.fa-redo
