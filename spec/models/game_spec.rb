@@ -30,5 +30,10 @@ RSpec.describe Game, type: :model do
       test_game.number_of_players = 5
       expect(test_game).to_not be_valid
     end
+
+    it 'should only allow a min number of players' do
+      test_game.number_of_players = 1
+      expect(test_game).to_not be_valid
+    end
   end
 end

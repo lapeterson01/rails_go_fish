@@ -7,5 +7,9 @@ class Game < ApplicationRecord
   has_many :users, -> { distinct }, through: :game_users
 
   validates :name, uniqueness: true
-  validates :number_of_players, numericality: { less_than_or_equal_to: 4, only_integer: true }
+  validates :number_of_players, numericality: {
+    less_than_or_equal_to: 4,
+    greater_than_or_equal_to: 2,
+    only_integer: true
+  }
 end
