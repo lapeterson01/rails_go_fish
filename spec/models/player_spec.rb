@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Player, type: :model do
-  let(:player) { Player.new('Player') }
+  let(:player) { Player.new(1, 'Player') }
   let(:card1) { PlayingCard.new('A', 'Spades') }
 
   describe '#initialize' do
@@ -41,14 +41,16 @@ RSpec.describe Player, type: :model do
     it 'returns true if names are equal' do
       duplicate_player = player.dup
       expect(player).to eq duplicate_player
-      player2 = Player.new('Player 2')
+      player2 = Player.new(2, 'Player 2')
       expect(player).to_not eq player2
     end
   end
 
   describe 'json methods' do
     it 'allows player to be converted to json object' do
-      expect(player.as_json).to eq(name: player.name, hand: player.hand, books: player.books)
+      player_hand = player.hand.values.flat_map(&:as_json)
+      json_player = { id: player.id, name: player.name, hand: player_hand, books: player.books }
+      expect(player.as_json).to eq json_player
     end
 
     it 'allows player json object to be converted to class instance' do

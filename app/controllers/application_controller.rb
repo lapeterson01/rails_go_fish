@@ -1,10 +1,15 @@
 class ApplicationController < ActionController::Base
-  before_action :require_authentication
+  before_action :require_authentication, :clear_session_if_quit
 
   def require_authentication
     return if session[:current_user] && current_user
 
-    redirect_to new_user_path, notice: 'Login to continue'
+    redirect_to root_path, notice: 'Login to continue'
+  end
+
+  def clear_session_if_quit
+    session[:selected] = {}
+    session[:current_game] = nil
   end
 
   def current_user

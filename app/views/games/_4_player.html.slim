@@ -1,0 +1,47 @@
+- player2 = go_fish.other_players(current_player)[0]
+- player3 = go_fish.other_players(current_player)[1]
+- player4 = go_fish.other_players(current_player)[2]
+
+- if go_fish.turn == current_player.id && card && !player
+    form action="/select-player" method="post"
+        button.opponent style="cursor: pointer; outline-style: solid; outline-color: invert" name="player_id" type="submit" value="#{player3.id}"
+            div.opponent__card-count Cards: #{player3.count_hand}
+            div.opponent__name = player3.name
+            div.opponent__books-count Books: #{player3.books}
+
+- else
+    div.opponent
+        div.opponent__card-count Cards: #{player3.count_hand}
+        div.opponent__name = player3.name
+        div.opponent__books-count Books: #{player3.books}
+
+div.opponent_bubbles
+    - if go_fish.turn == current_player.id && card && !player
+        form action="/select-player" method="post"
+            button.opponent style="cursor: pointer; outline-style: solid; outline-color: invert" name="player_id" type="submit" value="#{player2.id}"
+                div.opponent__card-count Cards: #{player2.count_hand}
+                div.opponent__name = player2.name
+                div.opponent__books-count Books: #{player2.books}
+
+    - else
+        div.opponent
+            div.opponent__card-count Cards: #{player2.count_hand}
+            div.opponent__name = player2.name
+            div.opponent__books-count Books: #{player2.books}
+
+    div.table
+        - go_fish.deck.cards.length.times do |index|
+            = image_tag("cards/backs_red.png", style: "right: #{index * 3}px; z-index: #{index}", class: 'deck')
+
+    - if go_fish.turn == current_player.id && card && !player
+        form action="/select-player" method="post"
+            button.opponent style="cursor: pointer; outline-style: solid; outline-color: invert" name="player_id" type="submit" value="#{player4.id}"
+                div.opponent__card-count Cards: #{player4.count_hand}
+                div.opponent__name = player4.name
+                div.opponent__books-count Books: #{player4.books}
+
+    - else
+        div.opponent
+            div.opponent__card-count Cards: #{player4.count_hand}
+            div.opponent__name = player4.name
+            div.opponent__books-count Books: #{player4.books}

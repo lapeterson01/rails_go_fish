@@ -1,0 +1,7 @@
+.navbar
+    ul.navbar--list
+      li
+        = link_to 'Go Fish!', games_path, class: 'navbar--item'
+
+      li
+        = button_to 'Logout', session_path, method: :delete, class: 'logout'

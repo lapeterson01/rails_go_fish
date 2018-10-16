@@ -5,12 +5,12 @@ class GoFish
 
   DEAL_AMOUNT = 7
 
-  def initialize(deck = CardDeck.new, players = {}, turn = nil, round_result = nil)
+  def initialize(deck = CardDeck.new, players = {}, turn = nil, round_result = nil, started = false)
     @deck = deck
     @players = players
     @turn = turn
     @round_result = round_result
-    @started = false
+    @started = started
   end
 
   def start
@@ -38,8 +38,8 @@ class GoFish
   end
 
   def add_player(player)
-    players[player.name] = player
-    @turn = player if players.length == 1
+    players[player.id] = player
+    @turn = player.id if players.length == 1
   end
 
   def ==(other)
@@ -47,17 +47,28 @@ class GoFish
       round_result == other.round_result
   end
 
+  def other_players(player)
+    players.select { |key, value| value != player }
+  end
+
   def as_json
+    round_result[:cards] = round_result[:cards].map(&:as_json) if round_result
     {
       deck: deck.as_json,
       players: players.values.map(&:as_json),
-      turn: turn.name,
-      round_result: round_result
+      turn: turn,
+      round_result: round_result,
+      started: started
     }
   end
 
   def self.from_json(data)
-    players = data['players'].map { |player| [player['name'], Player.from_json(player)] }.to_h
-    new(CardDeck.from_json(data['deck']), players, players[data['turn']], data['round_result'])
+    if data['round_result']
+      data['round_result']['cards'] = data['round_result']['cards'].map do |card|
+        PlayingCard.from_json(card)
+      end
+    end
+    players = data['players'].map { |player| [player['id'], Player.from_json(player)] }.to_h
+    new(CardDeck.from_json(data['deck']), players, data['turn'], data['round_result'], data['started'])
   end
 end

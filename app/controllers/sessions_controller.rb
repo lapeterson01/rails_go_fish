@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
       return redirect_to root_path, notice: signin_notice('wrong password')
     end
 
-    session[:current_user] = @user.id
+    session[:current_user], session[:host] = @user.id, []
     redirect_to games_path, notice: 'Logged in successfully'
   end
 

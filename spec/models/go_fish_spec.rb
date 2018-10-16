@@ -34,7 +34,7 @@ end
 RSpec.describe GoFish, type: :model do
   # rubocop:disable Metrics/AbcSize
   def round_result_expectations(cards, round_result = go_fish.round_result)
-    expect(round_result[:card_from]).to eq go_fish.player
+    expect(round_result[:card_from]).to eq go_fish.player.id
     expect(round_result[:cards]).to eq cards
     expect(round_result[:rank_asked_for]).to eq go_fish.rank
     expect(round_result[:turn]).to eq go_fish.turn
@@ -46,14 +46,14 @@ RSpec.describe GoFish, type: :model do
     {
       'deck' => { 'cards' => go_fish.deck.as_json[:cards].map(&:stringify_keys) },
       'players' => go_fish.players.values.map(&:as_json).map(&:stringify_keys),
-      'turn' => go_fish.turn.name,
+      'turn' => go_fish.turn,
       'round_result' => go_fish.round_result
     }
   end
 
   let(:go_fish) { GoFish.new }
-  let(:player1) { Player.new('Player 1') }
-  let(:player2) { Player.new('Player 2') }
+  let(:player1) { Player.new(1, 'Player 1') }
+  let(:player2) { Player.new(2, 'Player 2') }
   let(:players) { [player1, player2] }
 
   describe '#initialize' do
@@ -143,9 +143,9 @@ RSpec.describe GoFish, type: :model do
       describe '#next_turn' do
         it 'goes to the next turn' do
           go_fish.next_turn
-          expect(go_fish.turn).to eq player2
+          expect(go_fish.turn).to eq player2.id
           go_fish.next_turn
-          expect(go_fish.turn).to eq player1
+          expect(go_fish.turn).to eq player1.id
         end
       end
 
@@ -211,11 +211,11 @@ RSpec.describe GoFish, type: :model do
     end
 
     it 'adds a player to the go_fish' do
-      expect(go_fish.players['Player 1']).to eq player1
+      expect(go_fish.players[1]).to eq player1
     end
 
     it 'sets the turn to the first person to join' do
-      expect(go_fish.turn).to eq player1
+      expect(go_fish.turn).to eq player1.id
     end
   end
 
@@ -228,8 +228,9 @@ RSpec.describe GoFish, type: :model do
       json_go_fish = {
         deck: go_fish.deck.as_json,
         players: go_fish.players.values.map(&:as_json),
-        turn: go_fish.turn.name,
-        round_result: go_fish.round_result
+        turn: go_fish.turn,
+        round_result: go_fish.round_result,
+        started: go_fish.started
       }
       expect(go_fish.as_json).to eq(json_go_fish)
     end

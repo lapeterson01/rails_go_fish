@@ -1,1 +1,33 @@
-h2 this is the game lobby
+.lobby
+  = render partial: 'navbar'
+
+  - if started
+    = render partial: 'game'
+  
+  - else
+    .back--link
+      = link_to 'Back', games_path
+
+    .players
+        h2.players__title Players:
+        ul.players__list
+            - players.each do |player|
+                - if player == current_player.name
+                    li.players__list--current_player.name = player
+                - else
+                    li = player
+
+    - if host == current_player.id
+      - if players.length == 1
+        p.game-message Waiting for other players to join!
+
+      - else
+        = button_to 'Start Game', game_path, method: :patch
+
+    - else
+      - if players.any? { |player| player == current_player.name }
+        p.game-message Waiting for host to start game!
+      
+      - else
+        form action="/games" method="post"
+          button type="submit" name="id" value="#{id}" Join

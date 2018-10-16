@@ -1,10 +1,11 @@
 class Player
-  attr_reader :name, :hand
+  attr_reader :id, :name, :hand
   attr_accessor :books
 
-  def initialize(name, hand = {}, books = 0)
+  def initialize(id, name, books = 0)
+    @id = id
     @name = name
-    @hand = hand
+    @hand = {}
     @books = books
   end
 
@@ -28,18 +29,21 @@ class Player
   end
 
   def ==(other)
-    name == other.name
+    id == other.id
   end
 
   def as_json
     {
+      id: id,
       name: name,
-      hand: hand,
+      hand: hand.values.flat_map(&:as_json),
       books: books
     }
   end
 
   def self.from_json(data)
-    new(data['name'], data['hand'], data['books'])
+    player = new(data['id'], data['name'], data['books'])
+    data['hand'].each { |card| player.retrieve_card(PlayingCard.from_json(card)) }
+    player
   end
 end

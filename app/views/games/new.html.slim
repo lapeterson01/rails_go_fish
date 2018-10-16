@@ -1,4 +1,6 @@
 .home
+    = render partial: 'navbar'
+    
     .back--link
         = link_to 'Back', games_path
 
@@ -9,7 +11,7 @@
         .home__name
             .field
                 = form.text_field :name, id: :game_name, class: 'name__input', placeholder: 'Name'
-                = form.text_field :number_of_players, id: :game_number_of_players, class: 'name__input', placeholder: 'Number of players'
+                = form.select :number_of_players, (2..4), prompt: 'Number of Players', id: :game_number_of_players, class: 'name__input'
 
             .actions
                 = form.submit class: 'name__button', value: 'Go!'
