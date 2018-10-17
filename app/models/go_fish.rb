@@ -5,7 +5,7 @@ class GoFish
 
   DEAL_AMOUNT = 7
 
-  def initialize(deck = CardDeck.new, players = {}, turn = nil, round_result = nil, started = false)
+  def initialize(deck = deck_env, players = {}, turn = nil, round_result = nil, started = false)
     @deck = deck
     @players = players
     @turn = turn
@@ -48,9 +48,10 @@ class GoFish
   end
 
   def other_players(player)
-    players.select { |key, value| value != player }
+    players.reject { |_key, value| value == player }
   end
 
+  # rubocop:disable Metrics/MethodLength
   def as_json
     round_result[:cards] = round_result[:cards].map(&:as_json) if round_result
     {
@@ -61,6 +62,7 @@ class GoFish
       started: started
     }
   end
+  # rubocop:enable Metrics/MethodLength
 
   def self.from_json(data)
     if data['round_result']
@@ -69,6 +71,18 @@ class GoFish
       end
     end
     players = data['players'].map { |player| [player['id'], Player.from_json(player)] }.to_h
-    new(CardDeck.from_json(data['deck']), players, data['turn'], data['round_result'], data['started'])
+    new(deck_env_json(data['deck']), players, data['turn'], data['round_result'], data['started'])
+  end
+
+  def self.deck_env_json(data)
+    Rails.env.test? ? TestDeck.from_json(data) : CardDeck.from_json(data)
+  end
+
+  private_class_method :deck_env_json
+
+  private
+
+  def deck_env
+    Rails.env.test? ? TestDeck.new : CardDeck.new
   end
 end

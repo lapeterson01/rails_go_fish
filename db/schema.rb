@@ -10,37 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181016203502) do
-
+ActiveRecord::Schema.define(version: 20_181_016_203_502) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension 'plpgsql'
 
-  create_table "game_users", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "game_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["game_id"], name: "index_game_users_on_game_id"
-    t.index ["user_id"], name: "index_game_users_on_user_id"
+  create_table 'game_users', force: :cascade do |t|
+    t.bigint 'user_id'
+    t.bigint 'game_id'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['game_id'], name: 'index_game_users_on_game_id'
+    t.index ['user_id'], name: 'index_game_users_on_user_id'
   end
 
-  create_table "games", force: :cascade do |t|
-    t.string "name"
-    t.integer "number_of_players"
-    t.jsonb "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "host"
+  create_table 'games', force: :cascade do |t|
+    t.string 'name'
+    t.integer 'number_of_players'
+    t.jsonb 'data'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.integer 'host'
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.string "username"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "password_digest"
+  create_table 'users', force: :cascade do |t|
+    t.string 'name'
+    t.string 'username'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.string 'password_digest'
   end
 
-  add_foreign_key "game_users", "games"
-  add_foreign_key "game_users", "users"
+  add_foreign_key 'game_users', 'games'
+  add_foreign_key 'game_users', 'users'
 end

@@ -6,14 +6,14 @@ class SessionsController < ApplicationController
   end
 
   def create
-    @user = User.find_by_username(user_params['username'])
-    return redirect_to root_path, notice: signin_notice('no user') unless @user
+    user = User.find_by_username(user_params['username'])
+    return redirect_to root_path, notice: signin_notice('no user') unless user
 
-    unless @user.authenticate(user_params['password'])
+    unless user.authenticate(user_params['password'])
       return redirect_to root_path, notice: signin_notice('wrong password')
     end
 
-    session[:current_user], session[:host] = @user.id, []
+    session[:current_user], session[:host] = user.id, []
     redirect_to games_path, notice: 'Logged in successfully'
   end
 

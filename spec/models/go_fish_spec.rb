@@ -1,33 +1,25 @@
 require 'rails_helper'
 
-class TestDeck
+class TestDeck < CardDeck
   attr_reader :cards
 
   RANKS = %w[A K Q J].freeze
   SUITS = %w[Spades Clubs Diamonds Hearts].freeze
 
-  def initialize
-    @cards = RANKS.map { |rank| SUITS.map { |suit| PlayingCard.new(rank, suit) } }.flatten
+  def initialize(cards = TestDeck.create_test_deck)
+    @cards = cards
+  end
+
+  def self.create_test_deck
+    RANKS.flat_map do |rank|
+      SUITS.map do |suit|
+        PlayingCard.new(rank, suit)
+      end
+    end
   end
 
   def shuffle!
     # do nothing
-  end
-
-  def deal
-    cards.shift
-  end
-
-  def out_of_cards?
-    cards.empty?
-  end
-
-  def ==(other)
-    equal = true
-    other.cards.each do |card2|
-      equal = false if cards[other.cards.index(card2)] != card2
-    end
-    equal
   end
 end
 
@@ -58,7 +50,7 @@ RSpec.describe GoFish, type: :model do
 
   describe '#initialize' do
     it 'begins with deck of 52 standard playing cards' do
-      expect(go_fish.deck).to eq CardDeck.new
+      expect(go_fish.deck).to eq TestDeck.new
     end
 
     it 'begins with empty players hash' do
@@ -77,6 +69,7 @@ RSpec.describe GoFish, type: :model do
     describe '#start' do
       it 'shuffles the deck' do
         deck = CardDeck.new
+        go_fish = GoFish.new(CardDeck.new)
         expect(go_fish.deck).to eq deck
         go_fish.start
         14.times { deck.deal }
@@ -85,7 +78,7 @@ RSpec.describe GoFish, type: :model do
 
       it 'deals deck to players' do
         go_fish.start
-        expect(go_fish.deck.cards.length).to eq 38
+        expect(go_fish.deck.cards.length).to eq 2
         expect(player1.count_hand && player2.count_hand).to eq 7
       end
     end

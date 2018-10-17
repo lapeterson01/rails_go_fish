@@ -38,7 +38,11 @@
         .play
             - if !selected['card'] && !selected['player']
                 - if result
-                    p = result
+                    = result
+                    br
+                - if book_result
+                    = book_result
+                    br
                 
                 | Choose a card to ask for...
             - elsif selected['card'] && !selected['player']
@@ -48,9 +52,13 @@
                 form action="/play-round" method="post"
                     button.play__button type="submit" name="play" Play!          
     - else
-        div.play--message
+        .play--message
           - if result
               = result
+              br
+              
+          - if book_result
+              = book_result
 
           - else
               | Waiting for #{go_fish.players[go_fish.turn].name} to take their turn...

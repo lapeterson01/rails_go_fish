@@ -25,7 +25,7 @@ module GoFishRoundHelper
       next if set_cards.length < 4
 
       players[turn].books += 1
-      round_result[:books] = 1
+      round_result[:books] = turn
       players[turn].give_up_cards(set)
     end
   end

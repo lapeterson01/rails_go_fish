@@ -1,6 +1,6 @@
-- player2 = go_fish.other_players(current_player)[0]
-- player3 = go_fish.other_players(current_player)[1]
-- player4 = go_fish.other_players(current_player)[2]
+- player2 = go_fish.other_players(current_player).values[0]
+- player3 = go_fish.other_players(current_player).values[1]
+- player4 = go_fish.other_players(current_player).values[2]
 
 - if go_fish.turn == current_player.id && card && !player
     form action="/select-player" method="post"
