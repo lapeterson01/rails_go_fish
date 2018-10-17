@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_181_016_203_502) do
+ActiveRecord::Schema.define(version: 20_181_017_212_949) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -30,6 +30,8 @@ ActiveRecord::Schema.define(version: 20_181_016_203_502) do
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.integer 'host'
+    t.bigint 'winner_id'
+    t.index ['winner_id'], name: 'index_games_on_winner_id'
   end
 
   create_table 'users', force: :cascade do |t|
@@ -42,4 +44,5 @@ ActiveRecord::Schema.define(version: 20_181_016_203_502) do
 
   add_foreign_key 'game_users', 'games'
   add_foreign_key 'game_users', 'users'
+  add_foreign_key 'games', 'users', column: 'winner_id'
 end

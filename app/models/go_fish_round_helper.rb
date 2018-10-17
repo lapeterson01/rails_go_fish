@@ -1,6 +1,8 @@
 module GoFishRoundHelper
   attr_reader :player, :rank, :get_catch
 
+  VALUES = { 'A' => 14, 'K' => 13, 'Q' => 12, 'J' => 11 }.freeze
+
   def set_player_and_rank(player, rank)
     @player = player
     @rank = rank
@@ -24,7 +26,7 @@ module GoFishRoundHelper
     players[turn].hand.each_pair do |set, set_cards|
       next if set_cards.length < 4
 
-      players[turn].books += 1
+      players[turn].add_book(set)
       round_result[:books] = turn
       players[turn].give_up_cards(set)
     end
@@ -36,5 +38,15 @@ module GoFishRoundHelper
             else
               players.keys[players.keys.index(turn) + 1]
             end
+  end
+
+  def tie_breaker(winners)
+    winners.max_by do |player|
+      score = 0
+      player.books.each do |rank|
+        score += VALUES[rank] || rank.to_i
+      end
+      score
+    end
   end
 end

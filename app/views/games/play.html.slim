@@ -12,7 +12,7 @@
         .current-player__info
             div Cards: #{current_player.count_hand}
             div = current_player.name
-            div Books: #{current_player.books}
+            div Books: #{current_player.books.length}
 
         ul.hand--card-list
             / == slim :_player_hand, locals: { game: game, current_player: current_player, card: selected['card'], player: selected['player'], hand: game.players[current_player.name].hand}

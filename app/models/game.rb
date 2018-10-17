@@ -5,6 +5,7 @@ class Game < ApplicationRecord
 
   has_many :game_users, dependent: :destroy
   has_many :users, -> { distinct }, through: :game_users
+  belongs_to :winner, class_name: 'User', optional: true
 
   validates :name, uniqueness: true
   validates :number_of_players, numericality: {
@@ -46,6 +47,7 @@ class Game < ApplicationRecord
   def play_round(selected)
     player = go_fish.players[selected['player']]
     go_fish.play_round(player, selected['card'])
+    self.winner = User.find(go_fish.winner.id) if go_fish.winner
     finalize
   end
 

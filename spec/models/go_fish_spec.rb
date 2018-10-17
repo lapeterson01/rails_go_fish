@@ -24,7 +24,6 @@ class TestDeck < CardDeck
 end
 
 RSpec.describe GoFish, type: :model do
-  # rubocop:disable Metrics/AbcSize
   def round_result_expectations(cards, round_result = go_fish.round_result)
     expect(round_result[:card_from]).to eq go_fish.player.id
     expect(round_result[:cards]).to eq cards
@@ -32,7 +31,6 @@ RSpec.describe GoFish, type: :model do
     expect(round_result[:turn]).to eq go_fish.turn
     yield if block_given?
   end
-  # rubocop:enable Metrics/AbcSize
 
   def json_go_fish
     {
@@ -129,7 +127,7 @@ RSpec.describe GoFish, type: :model do
           go_fish.player_has_card
           go_fish.calculate_books
           expect(player1.count_hand).to eq 0
-          expect(player1.books).to eq 1
+          expect(player1.books.length).to eq 1
         end
       end
 
@@ -179,7 +177,7 @@ RSpec.describe GoFish, type: :model do
         go_fish.play_round(player2, 'A')
         expect(go_fish.winner).to eq nil
         players.reverse_each { |player| go_fish.play_round(player, '2') }
-        expect(go_fish.winner).to eq [player1]
+        expect(go_fish.winner).to eq player1
       end
 
       it 'assigns a winner when a player is out of cards' do
@@ -187,13 +185,13 @@ RSpec.describe GoFish, type: :model do
         player2.retrieve_card(card2)
         %w[Diamonds Hearts].each { |suit| player1.retrieve_card(PlayingCard.new('A', suit)) }
         go_fish.play_round(player2, 'A')
-        expect(go_fish.winner).to eq [player1]
+        expect(go_fish.winner).to eq player1
       end
 
-      it 'assigns multiple winners if there is a tie' do
+      it 'initiates a tie breaker if there is a tie' do
         go_fish.start
         players.reverse_each { |player| go_fish.play_round(player, '2') }
-        expect(go_fish.winner).to eq [player1, player2]
+        expect(go_fish.winner).to eq player1
       end
     end
   end

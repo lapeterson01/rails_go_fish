@@ -9,6 +9,8 @@ class GamesController < ApplicationController
   def show
     session[:current_game] = params['id']
     game = Game.find(params['id'])
+    return game_over_view(game) if game.winner
+
     return play_view(game) if game.data['started']
 
     render :show, locals: show_locals(game)
@@ -22,6 +24,10 @@ class GamesController < ApplicationController
       result: game.format_round_result(session[:current_user]),
       book_result: game.format_book_result(session[:current_user])
     }
+  end
+
+  def game_over_view(game)
+    render :game_over, locals: { game_results: game.winner.name }
   end
 
   def new

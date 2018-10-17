@@ -33,8 +33,9 @@ class GoFish
   def winner
     return unless players.values.any?(&:out_of_cards?) || deck.out_of_cards?
 
-    winners = players.values.map { |player| [player, player.books] }.to_h
-    winners.select { |_player, books| books == winners.values.max }.keys
+    players_books = players.values.map { |player| [player, player.books] }.to_h
+    winners = players_books.select { |_player, books| books == players_books.values.max }.keys
+    winners.length > 1 ? tie_breaker(winners) : winners[0]
   end
 
   def add_player(player)

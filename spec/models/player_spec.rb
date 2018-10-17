@@ -7,7 +7,7 @@ RSpec.describe Player, type: :model do
   describe '#initialize' do
     it 'begins with given name and an empty hand and books count set to 0' do
       expect(player.name).to eq 'Player'
-      expect(player.count_hand && player.books).to eq 0
+      expect(player.count_hand && player.books.length).to eq 0
     end
   end
 

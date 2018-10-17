@@ -1,1 +1,9 @@
-<h2>This is the game over</h2>
+div.game
+    div.game-over--title
+        h1 Game Over!
+
+    div.game-over--message
+        h3 Winner: #{game_results}
+
+    / form action="/restart-game" method="post"
+    /     button.restart type="submit" name="name" value="#{current_player.name}" Play Again!

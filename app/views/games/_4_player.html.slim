@@ -7,13 +7,13 @@
         button.opponent style="cursor: pointer; outline-style: solid; outline-color: invert" name="player_id" type="submit" value="#{player3.id}"
             div.opponent__card-count Cards: #{player3.count_hand}
             div.opponent__name = player3.name
-            div.opponent__books-count Books: #{player3.books}
+            div.opponent__books-count Books: #{player3.books.length}
 
 - else
     div.opponent
         div.opponent__card-count Cards: #{player3.count_hand}
         div.opponent__name = player3.name
-        div.opponent__books-count Books: #{player3.books}
+        div.opponent__books-count Books: #{player3.books.length}
 
 div.opponent_bubbles
     - if go_fish.turn == current_player.id && card && !player
@@ -21,13 +21,13 @@ div.opponent_bubbles
             button.opponent style="cursor: pointer; outline-style: solid; outline-color: invert" name="player_id" type="submit" value="#{player2.id}"
                 div.opponent__card-count Cards: #{player2.count_hand}
                 div.opponent__name = player2.name
-                div.opponent__books-count Books: #{player2.books}
+                div.opponent__books-count Books: #{player2.books.length}
 
     - else
         div.opponent
             div.opponent__card-count Cards: #{player2.count_hand}
             div.opponent__name = player2.name
-            div.opponent__books-count Books: #{player2.books}
+            div.opponent__books-count Books: #{player2.books.length}
 
     div.table
         - go_fish.deck.cards.length.times do |index|
@@ -38,10 +38,10 @@ div.opponent_bubbles
             button.opponent style="cursor: pointer; outline-style: solid; outline-color: invert" name="player_id" type="submit" value="#{player4.id}"
                 div.opponent__card-count Cards: #{player4.count_hand}
                 div.opponent__name = player4.name
-                div.opponent__books-count Books: #{player4.books}
+                div.opponent__books-count Books: #{player4.books.length}
 
     - else
         div.opponent
             div.opponent__card-count Cards: #{player4.count_hand}
             div.opponent__name = player4.name
-            div.opponent__books-count Books: #{player4.books}
+            div.opponent__books-count Books: #{player4.books.length}

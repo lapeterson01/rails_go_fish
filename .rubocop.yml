@@ -5,7 +5,7 @@ Style/ParallelAssignment:
 Metrics/LineLength:
   Max: 100
 Metrics/AbcSize:
-  Max: 18
+  Enabled: false
 Lint/HandleExceptions:
   Enabled: false
 Metrics/BlockLength:

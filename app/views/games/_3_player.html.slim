@@ -5,14 +5,14 @@ div.opponent_bubbles
                 button.opponent style="cursor: pointer; outline-style: solid; outline-color: invert" name="player_id" type="submit" value="#{player.id}"
                     div.opponent__card-count Cards: #{player.count_hand}
                     div.opponent__name = player.name
-                    div.opponent__books-count Books: #{player.books}
+                    div.opponent__books-count Books: #{player.books.length}
 
     - else
         - go_fish.other_players(current_player).each_value do |player|
                 div.opponent
                     div.opponent__card-count Cards: #{player.count_hand}
                     div.opponent__name = player.name
-                    div.opponent__books-count Books: #{player.books}
+                    div.opponent__books-count Books: #{player.books.length}
 
 div.table
     - go_fish.deck.cards.length.times do |index|

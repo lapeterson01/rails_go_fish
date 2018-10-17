@@ -1,8 +1,7 @@
 class Player
-  attr_reader :id, :name, :hand
-  attr_accessor :books
+  attr_reader :id, :name, :hand, :books
 
-  def initialize(id, name, books = 0)
+  def initialize(id, name, books = [])
     @id = id
     @name = name
     @hand = {}
@@ -26,6 +25,10 @@ class Player
 
   def out_of_cards?
     hand.empty?
+  end
+
+  def add_book(rank)
+    books << rank
   end
 
   def ==(other)
