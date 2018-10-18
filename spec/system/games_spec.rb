@@ -121,5 +121,13 @@ RSpec.describe 'Games', type: :system do
       expect(session1).to have_content 'You got a book!'
       expect(session2).to have_content "#{test_user.name} got a book!"
     end
+
+    it 'allows a player to win' do
+      initiate_game
+      %w[A K Q J].each { |rank| play_round(rank) }
+      session2.driver.refresh
+      expect(session1 && session2).to have_content 'Game Over'
+      expect(session1 && session2).to have_content "Winner: #{test_user.name}"
+    end
   end
 end

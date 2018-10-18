@@ -13,6 +13,7 @@ class Game < ApplicationRecord
     greater_than_or_equal_to: 2,
     only_integer: true
   }
+  validates :host, presence: true
 
   def go_fish(go_fish = nil)
     @go_fish ||= go_fish || GoFish.from_json(data)

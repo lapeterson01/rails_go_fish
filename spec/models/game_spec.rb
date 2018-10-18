@@ -2,7 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Game, type: :model do
   let(:go_fish) { GoFish.new }
-  let(:test_game) { Game.new(name: 'test_game', number_of_players: 2, data: go_fish.start.as_json) }
+  let(:test_game) do
+    Game.new(name: 'test_game', number_of_players: 2, data: go_fish.start.as_json, host: 1)
+  end
 
   it 'should be valid' do
     expect(test_game).to be_valid
@@ -13,7 +15,7 @@ RSpec.describe Game, type: :model do
       test_game.name = ' '
       test_game.save
       expect(test_game.name).to eq "Go Fish #{test_game.id}"
-      test_game2 = Game.new(number_of_players: 2, data: go_fish.start.as_json)
+      test_game2 = Game.new(number_of_players: 2, data: go_fish.start.as_json, host: 2)
       test_game2.save
       expect(test_game2.name).to eq "Go Fish #{test_game2.id}"
     end
@@ -33,6 +35,13 @@ RSpec.describe Game, type: :model do
 
     it 'should only allow a min number of players' do
       test_game.number_of_players = 1
+      expect(test_game).to_not be_valid
+    end
+  end
+
+  describe 'host' do
+    it 'should be present' do
+      test_game.host = nil
       expect(test_game).to_not be_valid
     end
   end
