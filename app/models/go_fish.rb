@@ -5,7 +5,7 @@ class GoFish
 
   DEAL_AMOUNT = 7
 
-  def initialize(deck = deck_env, players = {}, turn = nil, round_result = nil, started = false)
+  def initialize(deck = CardDeck.new, players = {}, turn = nil, round_result = nil, started = false)
     @deck = deck
     @players = players
     @turn = turn
@@ -67,23 +67,10 @@ class GoFish
 
   def self.from_json(data)
     if data['round_result']
-      data['round_result']['cards'] = data['round_result']['cards'].map do |card|
-        PlayingCard.from_json(card)
-      end
+      data['round_result']['cards'].map! { |card| PlayingCard.from_json(card) }
     end
     players = data['players'].map { |player| [player['id'], Player.from_json(player)] }.to_h
-    new(deck_env_json(data['deck']), players, data['turn'], data['round_result'], data['started'])
-  end
-
-  def self.deck_env_json(data)
-    Rails.env.test? ? TestDeck.from_json(data) : CardDeck.from_json(data)
-  end
-
-  private_class_method :deck_env_json
-
-  private
-
-  def deck_env
-    Rails.env.test? ? TestDeck.new : CardDeck.new
+    new CardDeck.from_json(data['deck']), players, data['turn'], data['round_result'],
+        data['started']
   end
 end

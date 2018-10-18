@@ -1,7 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Player, type: :model do
-  let(:player) { Player.new(1, 'Player') }
+  let(:user) do
+    User.new name: 'Player', username: 'player', password: 'password',
+             password_confirmation: 'password'
+  end
+  let(:player) do
+    user.save
+    Player.new(user)
+  end
   let(:card1) { PlayingCard.new('A', 'Spades') }
 
   describe '#initialize' do
@@ -38,10 +45,18 @@ RSpec.describe Player, type: :model do
   end
 
   describe 'equality' do
+    let(:user2) do
+      User.new name: 'Player 2', username: 'player2', password: 'password',
+               password_confirmation: 'password'
+    end
+    let(:player2) do
+      user2.save
+      Player.new(user2)
+    end
+
     it 'returns true if names are equal' do
       duplicate_player = player.dup
       expect(player).to eq duplicate_player
-      player2 = Player.new(2, 'Player 2')
       expect(player).to_not eq player2
     end
   end

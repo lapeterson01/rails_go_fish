@@ -19,8 +19,22 @@ RSpec.describe GoFish, type: :model do
   end
 
   let(:go_fish) { GoFish.new }
-  let(:player1) { Player.new(1, 'Player 1') }
-  let(:player2) { Player.new(2, 'Player 2') }
+  let(:user1) do
+    User.new name: 'Player 1', username: 'player1', password: 'password',
+             password_confirmation: 'password'
+  end
+  let(:user2) do
+    User.new name: 'Player 2', username: 'player2', password: 'password',
+             password_confirmation: 'password'
+  end
+  let(:player1) do
+    user1.save
+    Player.new(user1)
+  end
+  let(:player2) do
+    user2.save
+    Player.new(user2)
+  end
   let(:players) { [player1, player2] }
 
   describe '#initialize' do
@@ -44,7 +58,6 @@ RSpec.describe GoFish, type: :model do
     describe '#start' do
       it 'shuffles the deck' do
         deck = CardDeck.new
-        go_fish = GoFish.new(CardDeck.new)
         expect(go_fish.deck).to eq deck
         go_fish.start
         14.times { deck.deal }
@@ -53,7 +66,7 @@ RSpec.describe GoFish, type: :model do
 
       it 'deals deck to players' do
         go_fish.start
-        expect(go_fish.deck.cards.length).to eq 2
+        expect(go_fish.deck.cards.length).to eq 38
         expect(player1.count_hand && player2.count_hand).to eq 7
       end
     end
@@ -128,7 +141,7 @@ RSpec.describe GoFish, type: :model do
           go_fish.player_has_card
           go_fish.calculate_books
           round_result_expectations([card2, card3, card4]) do
-            expect(go_fish.round_result[:books]).to eq 1
+            expect(go_fish.round_result[:books]).to eq player1.id
           end
         end
 
@@ -179,7 +192,7 @@ RSpec.describe GoFish, type: :model do
     end
 
     it 'adds a player to the go_fish' do
-      expect(go_fish.players[1]).to eq player1
+      expect(go_fish.players[player1.id]).to eq player1
     end
 
     it 'sets the turn to the first person to join' do

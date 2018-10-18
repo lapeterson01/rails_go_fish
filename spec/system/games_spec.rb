@@ -36,6 +36,16 @@ RSpec.describe 'Games', type: :system do
     session2.driver.refresh
   end
 
+  def initiate_game_with_test_deck
+    signin(sessions)
+    go_fish = GoFish.new(TestDeck.new)
+    test_users.each { |test_user| go_fish.add_player(Player.new(test_user)) }
+    go_fish.start
+    game = Game.new(number_of_players: 2, data: go_fish.as_json, host: test_user.id)
+    game.save
+    sessions.each { |session| session.visit game_url(game.id) }
+  end
+
   def play_round(rank)
     session1.click_on rank
     session1.click_on(class: 'opponent')
@@ -106,28 +116,31 @@ RSpec.describe 'Games', type: :system do
       expect(session1 && session2).to have_content 'Books: 0'
     end
 
-    it 'allows players to play a round' do
-      initiate_game
-      play_round('J')
-      expect(session1 && session2).to have_content('Cards: 8') && have_content('Cards: 6')
-      expect(session1).to have_content "You took J of Clubs from #{test_user2.name}"
-      expect(session2).to have_content "#{test_user.name} took J of Clubs from you"
-    end
+    describe 'gameplay' do
+      before do
+        initiate_game_with_test_deck
+      end
 
-    it 'allows player to get a book' do
-      initiate_game
-      play_round('A')
-      expect(session1 && session2).to have_content('Cards: 5', count: 2)
-      expect(session1).to have_content 'You got a book!'
-      expect(session2).to have_content "#{test_user.name} got a book!"
-    end
+      it 'allows players to play a round' do
+        play_round('J')
+        expect(session1 && session2).to have_content('Cards: 8') && have_content('Cards: 6')
+        expect(session1).to have_content "You took J of Clubs from #{test_user2.name}"
+        expect(session2).to have_content "#{test_user.name} took J of Clubs from you"
+      end
 
-    it 'allows a player to win' do
-      initiate_game
-      %w[A K Q J].each { |rank| play_round(rank) }
-      session2.driver.refresh
-      expect(session1 && session2).to have_content 'Game Over'
-      expect(session1 && session2).to have_content "Winner: #{test_user.name}"
+      it 'allows player to get a book' do
+        play_round('A')
+        expect(session1 && session2).to have_content('Cards: 5', count: 2)
+        expect(session1).to have_content 'You got a book!'
+        expect(session2).to have_content "#{test_user.name} got a book!"
+      end
+
+      it 'allows a player to win' do
+        %w[A K Q J].each { |rank| play_round(rank) }
+        session2.driver.refresh
+        expect(session1 && session2).to have_content 'Game Over'
+        expect(session1 && session2).to have_content "Winner: #{test_user.name}"
+      end
     end
   end
 end

@@ -1,9 +1,9 @@
 class Player
   attr_reader :id, :name, :hand, :books
 
-  def initialize(id, name, books = [])
-    @id = id
-    @name = name
+  def initialize(user, books = [])
+    @id = user.id
+    @name = user.name
     @hand = {}
     @books = books
   end
@@ -45,7 +45,7 @@ class Player
   end
 
   def self.from_json(data)
-    player = new(data['id'], data['name'], data['books'])
+    player = new(User.find(data['id']), data['books'])
     data['hand'].each { |card| player.retrieve_card(PlayingCard.from_json(card)) }
     player
   end

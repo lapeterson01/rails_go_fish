@@ -25,7 +25,7 @@ class Game < ApplicationRecord
 
   def add_player_to_game(user)
     data ? go_fish : go_fish(GoFish.new)
-    go_fish.add_player(Player.new(user.id, user.name))
+    go_fish.add_player(Player.new(user))
     finalize
     users << user
   end
