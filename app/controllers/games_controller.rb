@@ -37,7 +37,7 @@ class GamesController < ApplicationController
     game = Game.find_or_initialize_by game_params
     game.add_player_to_game(current_user)
     message = game.id ? 'Successfully created game' : 'Game creation unsuccessful'
-    refresh
+    refresh(game.id)
     return redirect_to games_path, notice: message if game.host == current_user.id
 
     redirect_to game, notice: 'Successfully joined'
@@ -46,7 +46,7 @@ class GamesController < ApplicationController
   def update
     game = Game.find(session[:current_game])
     game.start_game
-    refresh
+    game_refresh(game.id)
     redirect_to game, notice: 'Game Started'
   end
 
@@ -69,7 +69,7 @@ class GamesController < ApplicationController
     end
 
     game.play_round(params['player'], params['card'])
-    refresh
+    game_refresh(game.id)
     redirect_to game
   end
 
@@ -93,7 +93,11 @@ class GamesController < ApplicationController
     }
   end
 
-  def refresh
-    Pusher.trigger('go-fish', 'refresh', {}, socket_id: session[:socket_id])
+  def refresh(id)
+    Pusher.trigger('go-fish', "refresh", { id: id }, socket_id: session[:socket_id])
+  end
+
+  def game_refresh(id)
+    Pusher.trigger('go-fish', 'game-refresh', { id: id }, socket_id: session[:socket_id])
   end
 end
