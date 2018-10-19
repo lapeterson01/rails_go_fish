@@ -20,7 +20,6 @@ class GamesController < ApplicationController
     render :play, locals: {
       go_fish: game.go_fish,
       current_player: game.current_player(session[:current_user]),
-      selected: session[:selected],
       result: game.format_round_result(session[:current_user]),
       book_result: game.format_book_result(session[:current_user])
     }
@@ -38,32 +37,40 @@ class GamesController < ApplicationController
     game = Game.find_or_initialize_by game_params
     game.add_player_to_game(current_user)
     message = game.id ? 'Successfully created game' : 'Game creation unsuccessful'
+    refresh
     return redirect_to games_path, notice: message if game.host == current_user.id
 
-    redirect_to game_path(game.id), notice: 'Successfully joined'
+    redirect_to game, notice: 'Successfully joined'
   end
 
   def update
     game = Game.find(session[:current_game])
     game.start_game
-    redirect_to game_path(game.id), notice: 'Game Started'
+    refresh
+    redirect_to game, notice: 'Game Started'
   end
 
   def select_player
-    session[:selected]['player'] = params['player_id'].to_i
-    redirect_to game_path(session[:current_game])
+    game = Game.find(session[:current_game])
+    game.select_player(params['player_id'].to_i)
+    redirect_to game
   end
 
   def select_card
-    session[:selected]['card'] = params['card']
-    redirect_to game_path(session[:current_game])
+    game = Game.find(session[:current_game])
+    game.select_card(params['card'])
+    redirect_to game
   end
 
   def play_round
     game = Game.find(session[:current_game])
-    game.play_round(session[:selected])
-    session[:selected] = {}
-    redirect_to game_path(session[:current_game])
+    unless params['player'] && params['card']
+      return redirect_to game, notice: 'You must choose a player/card'
+    end
+
+    game.play_round(params['player'], params['card'])
+    refresh
+    redirect_to game
   end
 
   private
@@ -84,5 +91,9 @@ class GamesController < ApplicationController
       host: game.host,
       started: game.data['started']
     }
+  end
+
+  def refresh
+    Pusher.trigger('go-fish', 'refresh', {}, socket_id: session[:socket_id])
   end
 end

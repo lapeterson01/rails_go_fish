@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe GoFish, type: :model do
-  def round_result_expectations(cards, round_result = go_fish.round_result)
-    expect(round_result[:card_from]).to eq go_fish.player.id
+  def round_result_expectations(cards, player_id, rank, round_result = go_fish.round_result)
+    expect(round_result[:card_from]).to eq player_id
     expect(round_result[:cards]).to eq cards
-    expect(round_result[:rank_asked_for]).to eq go_fish.rank
+    expect(round_result[:rank_asked_for]).to eq rank
     expect(round_result[:turn]).to eq go_fish.turn
     yield if block_given?
   end
@@ -79,15 +79,15 @@ RSpec.describe GoFish, type: :model do
 
       describe '#set_player_and_rank' do
         it 'sets player and rank' do
-          go_fish.set_player_and_rank(player2, card2.rank)
-          expect(go_fish.player).to eq player2
-          expect(go_fish.rank).to eq card2.rank
+          go_fish.set_player_and_rank(player2.id, card2.rank)
+          expect(go_fish.selected_player).to eq player2
+          expect(go_fish.selected_rank).to eq card2.rank
         end
       end
 
       describe '#player_has_card' do
         it 'takes card from player if player has card and returns true (turn got catch)' do
-          go_fish.set_player_and_rank(player2, card2.rank)
+          go_fish.set_player_and_rank(player2.id, card2.rank)
           go_fish.player_has_card
           expect(go_fish.get_catch).to eq true
           expect(player1.count_hand).to eq 2
@@ -97,7 +97,7 @@ RSpec.describe GoFish, type: :model do
 
       describe '#go_fish' do
         it 'takes card from deck and gives it to turn and returns false (turn did not get catch)' do
-          go_fish.set_player_and_rank(player2, 'Q')
+          go_fish.set_player_and_rank(player2.id, 'Q')
           go_fish.go_fish
           expect(go_fish.get_catch).to eq false
           expect(player1.count_hand).to eq 2
@@ -113,7 +113,7 @@ RSpec.describe GoFish, type: :model do
         end
 
         it 'determines if turn got any books during turn' do
-          go_fish.set_player_and_rank(player2, 'A')
+          go_fish.set_player_and_rank(player2.id, 'A')
           go_fish.player_has_card
           go_fish.calculate_books
           expect(player1.count_hand).to eq 0
@@ -137,20 +137,20 @@ RSpec.describe GoFish, type: :model do
 
         it 'creates a hash to return with the results of the round' do
           [card3, card4].each { |card| player2.retrieve_card(card) }
-          go_fish.set_player_and_rank(player2, 'A')
+          go_fish.set_player_and_rank(player2.id, 'A')
           go_fish.player_has_card
           go_fish.calculate_books
-          round_result_expectations([card2, card3, card4]) do
+          round_result_expectations([card2, card3, card4], player2.id, 'A') do
             expect(go_fish.round_result[:books]).to eq player1.id
           end
         end
 
         it 'resets on next player turn' do
           player2.retrieve_card(card5)
-          go_fish.play_round(player2, card5.rank)
-          round_result_expectations([card5])
-          go_fish.play_round(player1, 'A')
-          round_result_expectations([card1])
+          go_fish.play_round(player2.id, card5.rank)
+          round_result_expectations([card5], player2.id, card5.rank)
+          go_fish.play_round(player1.id, 'A')
+          round_result_expectations([card1], player1.id, 'A')
         end
       end
     end
@@ -164,9 +164,9 @@ RSpec.describe GoFish, type: :model do
 
       it 'assigns a winner when the pool is out of cards' do
         go_fish.start
-        go_fish.play_round(player2, 'A')
+        go_fish.play_round(player2.id, 'A')
         expect(go_fish.winner).to eq nil
-        players.reverse_each { |player| go_fish.play_round(player, '2') }
+        players.reverse_each { |player| go_fish.play_round(player.id, '2') }
         expect(go_fish.winner).to eq player1
       end
 
@@ -174,13 +174,13 @@ RSpec.describe GoFish, type: :model do
         player1.retrieve_card(card1)
         player2.retrieve_card(card2)
         %w[Diamonds Hearts].each { |suit| player1.retrieve_card(PlayingCard.new('A', suit)) }
-        go_fish.play_round(player2, 'A')
+        go_fish.play_round(player2.id, 'A')
         expect(go_fish.winner).to eq player1
       end
 
       it 'initiates a tie breaker if there is a tie' do
         go_fish.start
-        players.reverse_each { |player| go_fish.play_round(player, '2') }
+        players.reverse_each { |player| go_fish.play_round(player.id, '2') }
         expect(go_fish.winner).to eq player1
       end
     end
@@ -228,7 +228,7 @@ RSpec.describe GoFish, type: :model do
 
     it 'is equal if deck, players, turn, and round_result are equal' do
       go_fish.start
-      go_fish.play_round(player2, 'A')
+      go_fish.play_round(player2.id, 'A')
       duplicate_go_fish = go_fish.dup
       expect(duplicate_go_fish).to eq go_fish
       go_fish2 = GoFish.new

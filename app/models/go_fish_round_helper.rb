@@ -1,16 +1,26 @@
 module GoFishRoundHelper
-  attr_reader :player, :rank, :get_catch
+  attr_reader :get_catch, :selected_player, :selected_rank
 
   VALUES = { 'A' => 14, 'K' => 13, 'Q' => 12, 'J' => 11 }.freeze
 
-  def set_player_and_rank(player, rank)
-    @player = player
-    @rank = rank
-    @round_result = { turn: turn, card_from: player.id, rank_asked_for: rank }
+  # def select_rank(rank)
+  #   @selected_rank = rank
+  #   @round_result = { turn: turn, rank_asked_for: rank }
+  # end
+
+  # def select_player(player_id)
+  #   @selected_player = players[player_id]
+  #   @round_result[:card_from] = player_id
+  # end
+
+  def set_player_and_rank(player_id, rank)
+    @selected_player = players[player_id.to_i]
+    @selected_rank = rank
+    @round_result = { turn: turn, card_from: player_id, rank_asked_for: rank }
   end
 
   def player_has_card
-    round_result[:cards] = player.give_up_cards(rank).each do |card|
+    round_result[:cards] = selected_player.give_up_cards(selected_rank).each do |card|
       players[turn].retrieve_card(card)
     end
     @get_catch = true
@@ -30,6 +40,7 @@ module GoFishRoundHelper
       round_result[:books] = turn
       players[turn].give_up_cards(set)
     end
+    @selected_rank, @selected_player = nil, nil
   end
 
   def next_turn

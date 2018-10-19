@@ -73,6 +73,7 @@ GEM
     ffi (1.9.25-x64-mingw32)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    httpclient (2.8.3)
     i18n (1.1.0)
       concurrent-ruby (~> 1.0)
     jbuilder (2.7.0)
@@ -105,6 +106,11 @@ GEM
       method_source (~> 0.9.0)
     public_suffix (3.0.3)
     puma (3.9.1)
+    pusher (1.3.2)
+      httpclient (~> 2.7)
+      multi_json (~> 1.0)
+      pusher-signature (~> 0.1.8)
+    pusher-signature (0.1.8)
     rack (2.0.5)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -228,6 +234,7 @@ DEPENDENCIES
   pg (= 1.1.3)
   pry
   puma (= 3.9.1)
+  pusher
   rails (= 5.1.6)
   rails-controller-testing (= 1.0.2)
   rails_12factor

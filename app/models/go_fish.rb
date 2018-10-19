@@ -23,9 +23,9 @@ class GoFish
     @started = true
   end
 
-  def play_round(player, rank)
-    set_player_and_rank(player, rank)
-    player.hand[rank] ? player_has_card : go_fish
+  def play_round(player_id, rank)
+    set_player_and_rank(player_id, rank)
+    selected_player.hand[selected_rank] ? player_has_card : go_fish
     calculate_books
     next_turn unless get_catch
   end
@@ -33,7 +33,7 @@ class GoFish
   def winner
     return unless players.values.any?(&:out_of_cards?) || deck.out_of_cards?
 
-    players_books = players.values.map { |player| [player, player.books] }.to_h
+    players_books = players.values.map { |player| [player, player.books.length] }.to_h
     winners = players_books.select { |_player, books| books == players_books.values.max }.keys
     winners.length > 1 ? tie_breaker(winners) : winners[0]
   end
@@ -66,7 +66,7 @@ class GoFish
   # rubocop:enable Metrics/MethodLength
 
   def self.from_json(data)
-    if data['round_result']
+    if data['round_result'] && data['round_result']['cards']
       data['round_result']['cards'].map! { |card| PlayingCard.from_json(card) }
     end
     players = data['players'].map { |player| [player['id'], Player.from_json(player)] }.to_h

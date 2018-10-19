@@ -1,67 +1,60 @@
-.game
-    = render partial: 'navbar'
 
-    - if go_fish.other_players(current_player).length == 1
-        = render '2_player', go_fish: go_fish, current_player: current_player, card: selected['card'], player: selected['player']
-    - elsif go_fish.other_players(current_player).length == 2
-        = render partial: '3_player', locals: { go_fish: go_fish, current_player: current_player, card: selected['card'], player: selected['player']}
-    - else
-        = render '4_player', go_fish: go_fish, current_player: current_player, card: selected['card'], player: selected['player']
+    = render 'navbar'
 
-    .current-player__hand
-        .current-player__info
-            div Cards: #{current_player.count_hand}
-            div = current_player.name
-            div Books: #{current_player.books.length}
+    = form_tag '/play-round', class: 'game' do
+        - if go_fish.other_players(current_player).length == 1
+            = render '2_player', go_fish: go_fish, current_player: current_player
+        - elsif go_fish.other_players(current_player).length == 2
+            = render '3_player', go_fish: go_fish, current_player: current_player
+        - else
+            = render '4_player', go_fish: go_fish, current_player: current_player
 
-        ul.hand--card-list
-            / == slim :_player_hand, locals: { game: game, current_player: current_player, card: selected['card'], player: selected['player'], hand: game.players[current_player.name].hand}
+        .current-player__hand
+            .current-player__info
+                div Cards: #{current_player.count_hand}
+                div = current_player.name
+                div Books: #{current_player.books.length}
 
-            - current_player.hand.each_pair do |rank, set|
-                - if go_fish.turn == current_player.id && !selected['card'] && !selected['player']
-                    li.hand--card-item
-                        form action="/select-card" method="post"
-                            button.card--button id="#{rank}" type="submit" name="card" value="#{rank}"
+            ul.hand--card-list
+
+                - current_player.hand.each_pair do |rank, set|
+                    - if go_fish.turn == current_player.id
+                        = radio_button_tag 'card', rank, false, class: 'hidden card--button'
+                        = label_tag "card[#{rank}]" do
+                            li.hand--card-item
                                 ul.card--list
                                     - set.each_with_index do |card, index|
                                         li.card style="top: #{index * 20}px; z-index: #{index}"
                                             = image_tag("cards/#{card.suit.chr.downcase}#{rank.downcase}.png")
 
-                - else
-                    li.hand--card-item style="outline: none"
-                        ul.card--list
-                            - set.each_with_index do |card, index|
-                                li.card style="top: #{index * 20}px; z-index: #{index}"
-                                    = image_tag("cards/#{card.suit.chr.downcase}#{rank.downcase}.png")
+                    - else
+                        li.hand--card-item
+                            ul.card--list
+                                - set.each_with_index do |card, index|
+                                    li.card style="top: #{index * 20}px; z-index: #{index}"
+                                        = image_tag("cards/#{card.suit.chr.downcase}#{rank.downcase}.png")
 
-    - if go_fish.turn == current_player.id
-        .play
-            - if !selected['card'] && !selected['player']
+        - if go_fish.turn == current_player.id
+            .play
                 - if result
                     = result
                     br
                 - if book_result
                     = book_result
                     br
+                    
+                | Choose a player and card...
+                br
+                = submit_tag 'Play!', class: 'play__button'
+
+        - else
+            .play--message
+                - if result
+                    = result
+                    br
                 
-                | Choose a card to ask for...
-            - elsif selected['card'] && !selected['player']
-                | Choose a player to ask for a card...
-            - else
-                | Click 'Play!' to play the round...
-                form action="/play-round" method="post"
-                    button.play__button type="submit" name="play" Play!          
-    - else
-        .play--message
-          - if result
-              = result
-              br
-              
-          - if book_result
-              = book_result
+                - if book_result
+                    = book_result
 
-          - else
-              | Waiting for #{go_fish.players[go_fish.turn].name} to take their turn...
-
-          / button.refresh onClick="window.location.reload()"
-          /     i.fas.fa-redo
+                - else
+                    | Waiting for #{go_fish.players[go_fish.turn].name} to take their turn...

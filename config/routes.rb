@@ -7,5 +7,6 @@ Rails.application.routes.draw do
   post '/select-player', to: 'games#select_player'
   post '/select-card',   to: 'games#select_card'
   post '/play-round',    to: 'games#play_round'
+  post '/set-socket-id', to: 'application#socket_id'
   root 'sessions#index'
 end
