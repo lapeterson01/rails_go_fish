@@ -35,16 +35,6 @@ class Game < ApplicationRecord
     finalize
   end
 
-  # def select_player(player_id)
-  #   go_fish.select_player(player_id)
-  #   finalize
-  # end
-
-  # def select_card(rank)
-  #   go_fish.select_rank(rank)
-  #   finalize
-  # end
-
   def play_round(player_id, rank)
     go_fish.play_round(player_id, rank)
     self.winner = User.find(go_fish.winner.id) if go_fish.winner

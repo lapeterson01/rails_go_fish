@@ -3,16 +3,6 @@ module GoFishRoundHelper
 
   VALUES = { 'A' => 14, 'K' => 13, 'Q' => 12, 'J' => 11 }.freeze
 
-  # def select_rank(rank)
-  #   @selected_rank = rank
-  #   @round_result = { turn: turn, rank_asked_for: rank }
-  # end
-
-  # def select_player(player_id)
-  #   @selected_player = players[player_id]
-  #   @round_result[:card_from] = player_id
-  # end
-
   def set_player_and_rank(player_id, rank)
     @selected_player = players[player_id.to_i]
     @selected_rank = rank
